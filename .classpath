@@ -52,5 +52,10 @@
 	<classpathentry kind="lib" path="/home/hadoop/hadoop-1.2.1/hadoop-ant-1.2.1.jar"/>
 	<classpathentry kind="lib" path="/home/hadoop/hadoop-1.2.1/hadoop-minicluster-1.2.1.jar"/>
 	<classpathentry kind="lib" path="/home/hadoop/hadoop-1.2.1/hadoop-tools-1.2.1.jar"/>
+	<classpathentry kind="lib" path="/home/hadoop/workspace/moead_parallel/apache-commons-lang.jar"/>
+	<classpathentry kind="lib" path="/home/hadoop/workspace/moead_parallel/commons-math-2.2.jar"/>
+	<classpathentry kind="lib" path="/home/hadoop/workspace/moead_parallel/commons-math-2.2-sources.jar"/>
+	<classpathentry kind="lib" path="/home/hadoop/workspace/moead_parallel/commons-math_trimmed2.jar"/>
+	<classpathentry kind="lib" path="/home/hadoop/workspace/moead_parallel/org.apache.commons.pool.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
