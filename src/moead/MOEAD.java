@@ -25,6 +25,7 @@ public class MOEAD {
 		AProblem problem = DTLZ2.getInstance();
 		AMOP mop = CMOP.getInstance(popSize,neighbourSize,problem);
 //		mop.setProblem(problem);
+		mop.initial();
 		for(int i = 0 ; i < iterations; i ++)
 			mop.updatePop();
 		

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import problems.AProblem;
+import utilities.WrongRemindException;
 
 public class CMOP extends AMOP {
 
@@ -19,7 +20,6 @@ public class CMOP extends AMOP {
 		this.neighbourSize = neighbourSize;
 		this.objectiveDimesion = AProblem.objectiveDimesion;
 		this.problem = problem;
-		initial();
 	}
 	
 	public static AMOP getInstance(int popSize,int neighbourSize,AProblem problem){
@@ -29,8 +29,13 @@ public class CMOP extends AMOP {
 	}
 	
 	
+	public static AMOP getInstance() throws Exception{
+		return new CMOP(popSize,neighbourSize,problem);
+	}
+	
+	
 	@Override
-	void initial() {
+	public void initial() {
 		idealPoint = new double[objectiveDimesion];
 		for(int i = 0; i < objectiveDimesion; i ++)
 			idealPoint[i] = 1.0e+30;
@@ -113,7 +118,7 @@ public class CMOP extends AMOP {
 
 	@Override
 	void generateInitialPop() {
-		chromosomes = new ArrayList<CMoChromosome>(popSize);
+		chromosomes = new ArrayList<MoChromosome>(popSize);
 		for(int i = 0; i < popSize; i ++)
 		{
 			chromosomes.add(CMoChromosome.createChromosome());
@@ -131,9 +136,9 @@ public class CMOP extends AMOP {
 					neighbourSize - 1)];
 		while (l == k || l == i);
 		
-		CMoChromosome chromosome1 =chromosomes
+		CMoChromosome chromosome1 =(CMoChromosome)chromosomes
 				.get(k);
-		CMoChromosome chromosome2 = chromosomes
+		CMoChromosome chromosome2 = (CMoChromosome)chromosomes
 				.get(l);
 		
 		MoChromosome offSpring = new CMoChromosome();
@@ -192,11 +197,11 @@ public class CMOP extends AMOP {
 					neighbourSize - 1)];
 		while (m == l || m == k || m == i);
 
-		CMoChromosome chromosome1 =chromosomes
+		CMoChromosome chromosome1 = (CMoChromosome)chromosomes
 				.get(k);
-		CMoChromosome chromosome2 = chromosomes
+		CMoChromosome chromosome2 = (CMoChromosome)chromosomes
 				.get(l);
-		CMoChromosome chromosome3 = chromosomes
+		CMoChromosome chromosome3 = (CMoChromosome)chromosomes
 				.get(m);
 
 		// generic operation crossover and mutation.

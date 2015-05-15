@@ -1,7 +1,8 @@
 package mop;
 
+import utilities.WrongRemindException;
+
 public interface DataOperator {
-	public String mop2Line();
-	public String mop2str();
-	public AMOP line2mop(String line);
+	public String mop2Line(int i);
+	public void line2mop(String line)  throws WrongRemindException;
 }
