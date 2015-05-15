@@ -9,15 +9,10 @@ import java.util.List;
 
 import problems.AProblem;
 
-public class CMOP extends AMOP{
+public class CMOP extends AMOP {
 
 	private final double F = 0.5;
 	private final double CR = 1;
-	
-	protected double[] idealPoint;
-	protected List<double[]> weights;
-	protected List<int[]> neighbourTable;
-	protected List<CMoChromosome> chromosomes;
 	
 	private CMOP(int popSize,int neighbourSize,AProblem problem){
 		this.popSize = popSize;
