@@ -10,14 +10,25 @@ public class MopData implements DataOperator{
 
 	public AMOP mop ;
 	
-	public MopData()  {
+	public MopData() {
 		try {
 			mop = (AMOP)CMOP.getInstance();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		mop.clearAll();
-		mop.allocateAll();
+	}
+	
+	public MopData(AMOP mop){
+		this.mop = mop; 
+	}
+	
+	public String mop2Str(){
+		List<String > col = new ArrayList<String>();
+		for(int i = 0 ; i < mop.weights.size(); i ++){
+			col.add(mop2Line(i));
+		}
+		col.add("111111111 " + StringJoin.join(",",mop.idealPoint));
+		return StringJoin.join("\n",col);
 	}
 	
 	@Override
@@ -27,9 +38,28 @@ public class MopData implements DataOperator{
 		col.add(StringJoin.join(",",mop.chromosomes.get(i).genes));
 		col.add(StringJoin.join(",",mop.chromosomes.get(i).objectiveValue));
 		col.add(StringJoin.join(",",mop.neighbourTable.get(i)));
+		col.add(String.valueOf(mop.chromosomes.get(i).fitnessValue));
 		return StringJoin.join(" ",col);
 	}
+	
+	public String idealPoint2Line(){
+		return StringJoin.join(",",mop.idealPoint);
+	}
+	
+	public String weight2Line(int i){
+		return StringJoin.join(",",mop.weights.get(i));
+	}
 
+	public double[] line2ObjValue(String line){
+		String[] lineSplit = line.split(" ");
+		String[] objectiveValueStr = lineSplit[2].split(",");
+		double[] objectiveValue = new double[objectiveValueStr.length];
+		for(int i = 0; i < objectiveValueStr.length; i ++){
+			objectiveValue[i] =  Double.parseDouble(objectiveValueStr[i]);
+		}
+		return objectiveValue;
+	}
+	
 	@Override
 	public void line2mop(String line) throws WrongRemindException {
 		String[] lineSplit = line.split(" ");
@@ -56,6 +86,7 @@ public class MopData implements DataOperator{
 			
 			String[] chromosomeStr = lineSplit[1].split(",");
 			String[] objectiveValueStr = lineSplit[2].split(",");
+			String fitnessValueStr = lineSplit[4];
 			MoChromosome chromosome = CMoChromosome.createChromosome();
 			if(chromosomeStr.length != chromosome.genes.length ){
 				throw new WrongRemindException("chromosome length isn't match. Data transfer error!");
@@ -69,6 +100,7 @@ public class MopData implements DataOperator{
 			for(int i = 0; i < objectiveValueStr.length; i ++){
 				chromosome.objectiveValue[i] =  Double.parseDouble(objectiveValueStr[i]);
 			}
+			chromosome.fitnessValue = Double.parseDouble(fitnessValueStr);
 			mop.chromosomes.add(chromosome);
 			
 			String[] neighbourStr = lineSplit[3].split(",");
@@ -81,8 +113,15 @@ public class MopData implements DataOperator{
 			}
 			mop.neighbourTable.add(neighbour);
 			
+			
+			
 		}
 		
+	}
+
+	public void clear() {
+		mop.clearAll();
+		mop.allocateAll();
 	}
 	
 }

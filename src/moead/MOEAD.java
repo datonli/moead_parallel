@@ -15,6 +15,12 @@ import problems.ZDT6;
 
 public class MOEAD {
 	
+	public static void moead(AMOP mop,int iterations){
+		mop.initial();
+		for(int i = 0 ; i < iterations; i ++)
+			mop.updatePop();
+	}
+	
 	
 	public static void main(String[] args) throws IOException{
 		

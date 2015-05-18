@@ -276,6 +276,7 @@ public class CMOP extends AMOP {
 	
 	private double scalarOptimization(int subproblemIndex, MoChromosome chrom) {
 		double[] namda = weights.get(subproblemIndex);
+		
 		return techScalarObj(namda, chrom);
 	}
 
@@ -290,6 +291,7 @@ public class CMOP extends AMOP {
 			if(val > max_fun)
 				max_fun = val;
 		}
+		chrom.fitnessValue = max_fun;
 		return max_fun;
 	}
 
