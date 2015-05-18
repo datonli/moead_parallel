@@ -63,7 +63,7 @@ public class MyFileInputFormat extends FileInputFormat<LongWritable, Text>{
 
 	private Collection<? extends InputSplit> getSplitsForFile(
 			FileStatus status, Configuration conf, int readTimeNum) throws IOException {
-		 List<FileSplit> splits = new ArrayList<FileSplit> ();
+		 	List<FileSplit> splits = new ArrayList<FileSplit> ();
 		    Path fileName = status.getPath();
 		    FileSystem  fs = fileName.getFileSystem(conf);
 		    LineReader lr = null;
@@ -76,7 +76,6 @@ public class MyFileInputFormat extends FileInputFormat<LongWritable, Text>{
 		      int num = -1;
 		      while ((num = lr.readLine(line)) > 0 ) {
 		        length += num;
-		        
 		      }
 		      for(int i = 0 ; i < readTimeNum; i ++)
 		        splits.add(createFileSplit(fileName, begin, length));

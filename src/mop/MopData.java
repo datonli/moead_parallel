@@ -10,8 +10,12 @@ public class MopData implements DataOperator{
 
 	public AMOP mop ;
 	
-	public MopData() throws Exception {
-		mop = (AMOP)CMOP.getInstance();
+	public MopData()  {
+		try {
+			mop = (AMOP)CMOP.getInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		mop.clearAll();
 		mop.allocateAll();
 	}
