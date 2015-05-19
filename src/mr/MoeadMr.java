@@ -1,6 +1,9 @@
 package mr;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import moead.MOEAD;
 import mop.AMOP;
@@ -19,6 +22,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import problems.AProblem;
 import problems.DTLZ2;
 import problems.ZDT1;
+import utilities.StringJoin;
 
 public class MoeadMr {
 
@@ -34,8 +38,9 @@ public class MoeadMr {
 		int popSize = 100;
 		int neighbourSize = 20;
 		int iterations = 200;
-		int readFileTime = 4;
-		int loopTime = iterations / readFileTime;
+		int readFileTime = 1;
+		int innerLoop = 200;
+		int loopTime = iterations / (readFileTime * innerLoop);
 		AProblem problem = ZDT1.getInstance();
 		AMOP mop = CMOP.getInstance(popSize, neighbourSize, problem);
 
@@ -44,26 +49,42 @@ public class MoeadMr {
 		MopData mopData = new MopData(mop);
 		String mopStr = mopData.mop2Str();
 		HdfsOper hdfsOper = new HdfsOper();
-		hdfsOper.rm("/moead/0/");
+		for(int i = 0; i < loopTime + 1; i ++)
+			hdfsOper.rm("/moead/" + i + "/");
 		hdfsOper.mkdir("/moead/0/");
 		hdfsOper.createFile("/moead/0/part-r-00000", mopStr);
 
+		long startTime = System.currentTimeMillis();
 		for (int i = 0; i < loopTime; i++) {
 			Configuration conf = new Configuration();
 			Job job = new Job(conf, "moead mr");
 			job.setJarByClass(MoeadMr.class);
+			MapClass.setInnerLoop(innerLoop);
 			MyFileInputFormat.setReadFileTime(job, readFileTime);
 			job.setInputFormatClass(MyFileInputFormat.class);
 			job.setOutputFormatClass(TextOutputFormat.class);
 			job.setMapperClass(MapClass.class);
 			job.setReducerClass(ReduceClass.class);
 			job.setOutputKeyClass(Text.class);
-			job.setOutputValueClass(IntWritable.class);
+			job.setOutputValueClass(Text.class);
 			FileInputFormat.addInputPath(job, new Path(
 					"hdfs://localhost:9000/moead/" + i +"/part-r-00000"));
 			FileOutputFormat.setOutputPath(job, new Path(
 					"hdfs://localhost:9000/moead/" + (i+1)));
 			job.waitForCompletion(true);
+		}
+		System.out.println("Running time is : " + (System.currentTimeMillis() - startTime));
+		for (int i = 0; i < loopTime + 1; i++) {
+			BufferedReader br = new BufferedReader(hdfsOper.open("/moead/" + i + "/part-r-00000"));
+			String line = null;
+			String content = null;
+			List<String> col = new ArrayList<String>();
+			while ((line = br.readLine()) != null && line.split(" ").length > 2) {
+				col.add(StringJoin.join(" ",mopData.line2ObjValue(line)));
+			}
+			content = StringJoin.join("\n", col);
+			mopData.write2File("/home/hadoop/experiment/parallel_result" + i + ".txt",content);
+//			hdfsOper.createFile("/moead/" + i + "/objectiveValue.txt", content);
 		}
 	}
 }
