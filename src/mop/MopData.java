@@ -24,7 +24,7 @@ public class MopData implements DataOperator{
 	
 	public String mop2Str(){
 		List<String > col = new ArrayList<String>();
-		for(int i = 0 ; i < mop.weights.size(); i ++){
+		for(int i = 0 ; i < mop.chromosomes.size(); i ++){
 			col.add(mop2Line(i));
 		}
 		col.add("111111111 " + StringJoin.join(",",mop.idealPoint));
