@@ -126,7 +126,7 @@ public class MopData implements DataOperator {
 		}
 
 	}
-
+	
 	public void clear() {
 		mop.clearAll();
 		mop.allocateAll();

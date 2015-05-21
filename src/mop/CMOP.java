@@ -93,20 +93,20 @@ public class CMOP extends AMOP {
 
 	private void initWeight() {
 		weights = new ArrayList<double[]>();
-		for (int i = 0; i < popSize; i++) {
+		for (int i = 0; i <= 27; i++) {
 			if (objectiveDimesion == 2) {
 				double[] weight = new double[2];
 				weight[0] = i / (double) popSize;
 				weight[1] = (popSize - i) / (double) popSize;
 				weights.add(weight);
 			} else if (objectiveDimesion == 3) {
-				for (int j = 0; j <= popSize; j++) {
-					if (i + j <= popSize) {
-						int k = popSize - i - j;
+				for (int j = 0; j <= 27; j++) {
+					if (i + j <= 27) {
+						int k = 27 - i - j;
 						double[] weight = new double[3];
-						weight[0] = i / (double) popSize;
-						weight[1] = j / (double) popSize;
-						weight[2] = k / (double) popSize;
+						weight[0] = i / (double) 27;
+						weight[1] = j / (double) 27;
+						weight[2] = k / (double) 27;
 						weights.add(weight);
 					}
 				}

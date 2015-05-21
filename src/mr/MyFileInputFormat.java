@@ -23,73 +23,74 @@ import org.apache.hadoop.util.LineReader;
 
 /**
  * duplicate using input file as multi-files input.
+ * 
  * @author root
  * @date 2015-5-4
  */
-public class MyFileInputFormat extends FileInputFormat<LongWritable, Text>{
-	
-	
-	public static final String READFILETIME ="READFILETIMES";	
-	
+public class MyFileInputFormat extends FileInputFormat<LongWritable, Text> {
+
+	public static final String READFILETIME = "READFILETIMES";
+
 	public static void setReadFileTime(Job job, int numLines) {
-	    job.getConfiguration().setInt(READFILETIME, numLines);
-	  }
+		job.getConfiguration().setInt(READFILETIME, numLines);
+	}
+
 	public static int getNumLinesPerSplit(JobContext job) {
-	    return job.getConfiguration().getInt(READFILETIME, 1);
-	  }
-	
+		return job.getConfiguration().getInt(READFILETIME, 1);
+	}
+
 	@Override
 	public RecordReader<LongWritable, Text> createRecordReader(
-		      InputSplit genericSplit, TaskAttemptContext context) 
-		      throws IOException {
-		
-		return new LineRecordReader();
+			InputSplit genericSplit, TaskAttemptContext context)
+			throws IOException {
+
+		return new MyFileRecordReader();
 	}
-	
-	/* protected boolean isSplitable(JobContext context, Path filename) {
-		    return false;
-	}*/
-	
+
+	protected boolean isSplitable(JobContext context, Path filename) {
+		return false;
+	}
+
 	@Override
-	public List<InputSplit> getSplits(JobContext job)
-			  throws IOException {
+	public List<InputSplit> getSplits(JobContext job) throws IOException {
 		List<InputSplit> splits = new ArrayList<InputSplit>();
-	    for (FileStatus status : listStatus(job)) {
-	      splits.addAll(getSplitsForFile(status,
-	        job.getConfiguration(), getNumLinesPerSplit(job)));
-	    }
-	    return splits;
+		for (FileStatus status : listStatus(job)) {
+			splits.addAll(getSplitsForFile(status, job.getConfiguration(),
+					getNumLinesPerSplit(job)));
+		}
+		return splits;
 	}
 
 	private Collection<? extends InputSplit> getSplitsForFile(
-			FileStatus status, Configuration conf, int readTimeNum) throws IOException {
-		 	List<FileSplit> splits = new ArrayList<FileSplit> ();
-		    Path fileName = status.getPath();
-		    FileSystem  fs = fileName.getFileSystem(conf);
-		    LineReader lr = null;
-		    try {
-		      FSDataInputStream in  = fs.open(fileName);
-		      lr = new LineReader(in, conf);
-		      Text line = new Text();
-		      long begin = 0;
-		      long length = 0;
-		      int num = -1;
-		      while ((num = lr.readLine(line)) > 0 ) {
-		        length += num;
-		      }
-		      for(int i = 0 ; i < readTimeNum; i ++)
-		        splits.add(createFileSplit(fileName, begin, length));
-		    } finally {
-		      if (lr != null) {
-		        lr.close();
-		      }
-		    }
-		    return splits; 
+			FileStatus status, Configuration conf, int readTimeNum)
+			throws IOException {
+		List<FileSplit> splits = new ArrayList<FileSplit>();
+		Path fileName = status.getPath();
+		FileSystem fs = fileName.getFileSystem(conf);
+		LineReader lr = null;
+		try {
+			FSDataInputStream in = fs.open(fileName);
+			lr = new LineReader(in, conf);
+			Text line = new Text();
+			long begin = 0;
+			long length = 0;
+			int num = -1;
+			while ((num = lr.readLine(line)) > 0) {
+				length += num;
+
+			}
+			for (int i = 0; i < readTimeNum; i++)
+				splits.add(createFileSplit(fileName, begin, length));
+		} finally {
+			if (lr != null) {
+				lr.close();
+			}
+		}
+		return splits;
 	}
 
 	private FileSplit createFileSplit(Path fileName, long begin, long length) {
 		return new FileSplit(fileName, begin, length - 1, new String[] {});
 	}
-
 
 }

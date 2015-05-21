@@ -17,13 +17,13 @@ public class ReduceClass extends Reducer<Text, Text, NullWritable, Text> {
 			throws IOException, InterruptedException {
 		String value = null;
 		String tmp = null;
-		double tmpFitnessValue = -1;
-		double maxFitnessValue = -1;
+		double tmpFitnessValue = 10;
+		double maxFitnessValue = 10;
 		for (Text val : values) {
 			tmp = val.toString();
 			if (!"111111111".equals(key.toString())) {
 				tmpFitnessValue = line2FitnessValue(tmp);
-				if (tmpFitnessValue > maxFitnessValue) {
+				if (tmpFitnessValue < maxFitnessValue) {
 					maxFitnessValue = tmpFitnessValue;
 					value = tmp;
 				}

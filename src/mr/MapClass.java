@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import moead.MOEAD;
 import mop.MopData;
-
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;

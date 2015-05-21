@@ -1,5 +1,6 @@
 package mr;
 
+
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
@@ -21,7 +22,6 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
-import org.apache.hadoop.util.LineReader;
 
 /**
  * This class aims to build RecordReader use in MyFileRecordReader. Deal with
@@ -33,11 +33,13 @@ import org.apache.hadoop.util.LineReader;
 public class MyFileRecordReader extends RecordReader<LongWritable, Text> {
 	private static final Log LOG = LogFactory.getLog(MyFileRecordReader.class);
 
+	private final String recordDelimiterStr = "";
+	
 	private CompressionCodecFactory compressionCodecs = null;
 	private long start;
 	private long pos;
 	private long end;
-	private LineReader in;
+	private MyLineReader in;
 	private int maxLineLength;
 	private LongWritable key = null;
 	private Text value = null;
@@ -47,12 +49,14 @@ public class MyFileRecordReader extends RecordReader<LongWritable, Text> {
 
 	public void initialize(InputSplit genericSplit, TaskAttemptContext context)
 			throws IOException {
+		byte[] recordDelimiterBytes = recordDelimiterStr.getBytes("UTF-8");
 		FileSplit split = (FileSplit) genericSplit;
 		Configuration job = context.getConfiguration();
 		this.maxLineLength = job.getInt("mapred.linerecordreader.maxlength",
 				Integer.MAX_VALUE);
 		start = split.getStart();
 		end = start + split.getLength();
+		
 		final Path file = split.getPath();
 		compressionCodecs = new CompressionCodecFactory(job);
 		codec = compressionCodecs.getCodec(file);
@@ -67,18 +71,22 @@ public class MyFileRecordReader extends RecordReader<LongWritable, Text> {
 				final SplitCompressionInputStream cIn = ((SplittableCompressionCodec) codec)
 						.createInputStream(fileIn, decompressor, start, end,
 								SplittableCompressionCodec.READ_MODE.BYBLOCK);
-				in = new LineReader(cIn, job);
+//				in = new MyLineReader(cIn, job,recordDelimiterBytes);
+				in = new MyLineReader(cIn, recordDelimiterBytes);
 				start = cIn.getAdjustedStart();
 				end = cIn.getAdjustedEnd();
 				filePosition = cIn;
 			} else {
-				in = new LineReader(codec.createInputStream(fileIn,
-						decompressor), job);
+				/*in = new MyLineReader(codec.createInputStream(fileIn,
+						decompressor), job,recordDelimiterBytes);*/
+				in = new MyLineReader(codec.createInputStream(fileIn,
+						decompressor), recordDelimiterBytes);
 				filePosition = fileIn;
 			}
 		} else {
 			fileIn.seek(start);
-			in = new LineReader(fileIn, job);
+//			in = new MyLineReader(fileIn, job,recordDelimiterBytes);
+			in = new MyLineReader(fileIn, recordDelimiterBytes);
 			filePosition = fileIn;
 		}
 		// If this is not the first split, we always throw away first record
@@ -88,6 +96,7 @@ public class MyFileRecordReader extends RecordReader<LongWritable, Text> {
 			start += in.readLine(new Text(), 0, maxBytesToConsume(start));
 		}
 		this.pos = start;
+//		this.pos = end ;
 	}
 
 	private boolean isCompressedInput() {
@@ -114,6 +123,7 @@ public class MyFileRecordReader extends RecordReader<LongWritable, Text> {
 			key = new LongWritable();
 		}
 		key.set(pos);
+		System.out.println("Start is : " + start + " ; pos is : " + pos + " ; end is : " + end);
 		if (value == null) {
 			value = new Text();
 		}
@@ -123,14 +133,16 @@ public class MyFileRecordReader extends RecordReader<LongWritable, Text> {
 		while (getFilePosition() <= end) {
 			newSize = in.readLine(value, maxLineLength,
 					Math.max(maxBytesToConsume(pos), maxLineLength));
+			System.out.println("newSize is : " + newSize);
 			if (newSize == 0) {
 				break;
 			}
 			pos += newSize;
 			if (newSize < maxLineLength) {
+				System.out.println("Break!");
 				break;
 			}
-
+			
 			// line too long. try again
 			LOG.info("Skipped line of size " + newSize + " at pos "
 					+ (pos - newSize));

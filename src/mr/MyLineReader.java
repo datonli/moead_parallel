@@ -198,10 +198,9 @@ public class MyLineReader {
 		long bytesConsumed = 0;
 		int delPosn = 0;
 		do {
-			int startPosn = bufferPosn; // starting from where we left off the
-										// last
-			// time
-			bufferPosn = buffer.length;
+			
+			int startPosn = bufferPosn; // starting from where we left off the last  time
+			bufferPosn = buffer.length;					
 			int n = -1;
 			int readLength = 0;
 			while((n = in.read(buffer))>0){
