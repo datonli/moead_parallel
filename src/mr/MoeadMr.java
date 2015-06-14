@@ -35,11 +35,14 @@ public class MoeadMr {
 	public static void main(String[] args) throws IOException,
 			ClassNotFoundException, InterruptedException {
 
-		int popSize = 1000;
-		int neighbourSize = 30;
-		int iterations = 400;
-		int readFileTime = 1;
-		int innerLoop = 400;
+//		int popSize = 406;
+//		int neighbourSize = 30;
+//		int iterations = 800;
+		int popSize = 4000;
+		int neighbourSize = 400;
+		int iterations = 6000;
+		int readFileTime = 4;
+		int innerLoop = 20;
 		int loopTime = iterations / (readFileTime * innerLoop);
 		AProblem problem = ZDT1.getInstance();
 		AMOP mop = CMOP.getInstance(popSize, neighbourSize, problem);
@@ -49,7 +52,7 @@ public class MoeadMr {
 		MopData mopData = new MopData(mop);
 		String mopStr = mopData.mop2Str();
 		HdfsOper hdfsOper = new HdfsOper();
-		for(int i = 0; i < loopTime + 1; i ++)
+		for(int i = 0; i < iterations + 1; i ++)
 			hdfsOper.rm("/moead/" + i + "/");
 		hdfsOper.mkdir("/moead/0/");
 		hdfsOper.createFile("/moead/0/part-r-00000", mopStr);
@@ -86,5 +89,6 @@ public class MoeadMr {
 			mopData.write2File("/home/hadoop/experiment/parallel_result/" + i + ".txt",content);
 //			hdfsOper.createFile("/moead/" + i + "/objectiveValue.txt", content);
 		}
+		System.out.println("LoopTime is : " + loopTime + "\n");
 	}
 }

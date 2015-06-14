@@ -24,11 +24,11 @@ public class MOEAD {
 	
 	public static void main(String[] args) throws IOException{
 		
-		int popSize = 406;
-		int neighbourSize = 30;
-		int iterations = 800;
+		int popSize = 4000;
+		int neighbourSize = 400;
+		int iterations = 6000;
 		
-		AProblem problem = DTLZ1.getInstance();
+		AProblem problem = ZDT1.getInstance();
 		AMOP mop = CMOP.getInstance(popSize,neighbourSize,problem);
 //		mop.setProblem(problem);
 		mop.initial();
