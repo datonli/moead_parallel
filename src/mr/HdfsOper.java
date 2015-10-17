@@ -21,7 +21,7 @@ import org.apache.hadoop.mapred.JobConf;
 public class HdfsOper {
 
 	// HDFS address
-	private static final String HDFS = "hdfs://slave1:9000/";
+	private static final String HDFS = "hdfs://192.168.1.102:9000/";
 	// hdfs path
 	private String hdfsPath;
 	// Hadoop configure
@@ -44,9 +44,9 @@ public class HdfsOper {
 	// load the configure files
 	public static Configuration config() {
 		Configuration conf = new JobConf(HdfsOper.class);
-		conf.addResource(new Path("/home/hadoop/hadoop-1.2.1/conf/core-site.xml"));
-		conf.addResource(new Path("/home/hadoop/hadoop-1.2.1/conf/hdfs-site.xml"));
-		conf.addResource(new Path("/home/hadoop/hadoop-1.2.1/conf/mapred-site.xml"));
+		conf.addResource(new Path("/home/laboratory/hadoop-1.2.1/conf/core-site.xml"));
+		conf.addResource(new Path("/home/laboratory/hadoop-1.2.1/conf/hdfs-site.xml"));
+		conf.addResource(new Path("/home/laboratory/hadoop-1.2.1/conf/mapred-site.xml"));
 //		conf.addResource("classpath:/hadoop/core-site.xml");
 //		conf.addResource("classpath:/hadoop/hdfs-site.xml");
 //		conf.addResource("classpath:/hadoop/mapred-site.xml");
@@ -225,21 +225,21 @@ public class HdfsOper {
 		
 		Configuration conf = config();
 		HdfsOper hdfs = new HdfsOper(conf);
-//		hdfs.mkdir("/moead/");
-//		hdfs.ls("/");
+		hdfs.mkdir("/moead/");
+		hdfs.ls("/");
 //		hdfs.ls("/user/root/input/");
 //		hdfs.addContentFile("/tmp/test.txt", "\ntest again!!!\n");
 //		hdfs.cat("/tmp/test.txt");
 //		hdfs.addContentFile("/tmp/test.txt", "\ntest again!!!\n");
 //		hdfs.cat("/tmp/test.txt");
 		
-		hdfs.ls("/moead/0/");
+		hdfs.ls("moead/0/");
 		
 		for(int i = 0; i <= 10; i ++)
 		{
-			hdfs.rm("/moead/" + i + "/");
+			hdfs.rm("moead/" + i + "/");
 			
 		}
-		hdfs.rm("/moead/moead.txt");
+		hdfs.rm("moead/moead.txt");
 	}
 }
