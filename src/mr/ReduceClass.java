@@ -3,23 +3,24 @@ package mr;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 
 import utilities.StringJoin;
 
-public class ReduceClass  extends MapReduceBase implements Reducer<Text, Text, NullWritable, Text> {
+public class ReduceClass extends MapReduceBase implements Reducer<Text, Text, NullWritable, Text> {
 	private Text result = new Text();
 
-	public void reduce(Text key, Iterable<Text> values, OutputCollector<NullWritable, Text> output, Reporter reporter)
+	public void reduce(Text key, Iterator<Text> values, OutputCollector<NullWritable, Text> output, Reporter reporter)
 			throws IOException{
 		String value = null;
 		String tmp = null;
 		double tmpFitnessValue = 10;
 		double maxFitnessValue = 10;
-		for (Text val : values) {
-			tmp = val.toString();
+		while(values.hasNext()){
+			tmp = values.next().toString();
 			if (!"111111111".equals(key.toString())) {
 				tmpFitnessValue = line2FitnessValue(tmp);
 				if (tmpFitnessValue < maxFitnessValue) {

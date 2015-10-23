@@ -1,6 +1,7 @@
 package mop;
 
 import problems.AProblem;
+//import org.apache.commons.math.random.RandomGenerator;
 
 public class CMoChromosome extends MoChromosome {
 	
@@ -10,8 +11,7 @@ public class CMoChromosome extends MoChromosome {
 
 	protected void randomizeParameter() {
 		for (int i = 0; i < genesDimesion; i++) {
-			genes[i] = PRNG.nextDouble(range[i][0],
-					range[i][1]);
+			genes[i] = PRNG.nextDouble(range[i][0],range[i][1]);
 		}
 	}
 	

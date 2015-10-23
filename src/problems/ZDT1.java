@@ -9,6 +9,7 @@ public class ZDT1 extends AProblem{
 	private ZDT1() {
 		genesDimesion = 30;
 		objectiveDimesion = 2;
+		//objectiveDimesion = 3;
 		range = new int[genesDimesion][objectiveDimesion];
 		for(int i = 0; i < genesDimesion; i ++){
 			range[i][0] = 0;

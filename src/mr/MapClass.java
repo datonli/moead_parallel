@@ -24,6 +24,7 @@ public class MapClass extends MapReduceBase implements Mapper<Object, Text, Text
 	public void map(Object key, Text value, OutputCollector<Text, Text> output, Reporter reporter) 
 			throws IOException{
 		String paragraph = value.toString();
+		System.out.println("paragraph is " + paragraph);
 		String[] lines = paragraph.split("\n");
 		mopData.clear();
 		try {
@@ -34,7 +35,8 @@ public class MapClass extends MapReduceBase implements Mapper<Object, Text, Text
 				mopData.line2mop(line);
 			
 //			running moead algorithm
-			MOEAD.moead(mopData.mop,1);
+			//MOEAD.moead(mopData.mop,1);
+			MOEAD.moead(mopData.mop,innerLoop);
 			
 			weightVector.set("111111111");
 			indivInfo.set(mopData.idealPoint2Line());

@@ -100,13 +100,20 @@ public class CMOP extends AMOP {
 				weight[1] = (popSize - i) / (double) popSize;
 				weights.add(weight);
 			} else if (objectiveDimesion == 3) {
-				for (int j = 0; j <= 27; j++) {
-					if (i + j <= 27) {
-						int k = 27 - i - j;
+				int parts_num = 0;
+				for(int f = 0; f <= popSize/2; f ++){
+					if(popSize == f*(f-1)/2){
+							parts_num = f;
+							break;
+					}
+				}
+				for (int j = 0; j <= parts_num; j++) {
+					if (i + j <= parts_num) {
+						int k = parts_num - i - j;
 						double[] weight = new double[3];
-						weight[0] = i / (double) 27;
-						weight[1] = j / (double) 27;
-						weight[2] = k / (double) 27;
+						weight[0] = i / (double) parts_num;
+						weight[1] = j / (double) parts_num;
+						weight[2] = k / (double) parts_num;
 						weights.add(weight);
 					}
 				}

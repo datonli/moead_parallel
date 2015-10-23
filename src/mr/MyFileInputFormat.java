@@ -34,8 +34,11 @@ public class MyFileInputFormat extends FileInputFormat<LongWritable, Text> //imp
 	    Reporter reporter
 	) 
 	throws IOException{
-		
-		return new MyFileRecordReader();
+		String recordDelimiterStr = "";
+		byte[] recordDelimiterBytes = recordDelimiterStr.getBytes("UTF-8");
+		FileSplit split = (FileSplit) genericSplit;
+		System.out.println("Enter getRecordReader!!!");
+		return new MyFileRecordReader2(job,split,recordDelimiterBytes);
 	}
 	
 	/*
@@ -51,12 +54,12 @@ public class MyFileInputFormat extends FileInputFormat<LongWritable, Text> //imp
 		return false;
 	}
 
-	public List<InputSplit> getSplits(JobContext job) throws IOException {
+	public List<InputSplit> getSplits(JobConf job) throws IOException {
 		List<InputSplit> splits = new ArrayList<InputSplit>();
 		for (FileStatus status : listStatus(job)) {
-			splits.addAll(getSplitsForFile(status, job.getConfiguration(),
+			splits.addAll(getSplitsForFile(status, job,
 					//getNumLinesPerSplit(job)
-					1
+					4
 					));
 		}
 		return splits;
@@ -78,8 +81,8 @@ public class MyFileInputFormat extends FileInputFormat<LongWritable, Text> //imp
 			int num = -1;
 			while ((num = lr.readLine(line)) > 0) {
 				length += num;
-
 			}
+			System.out.println("getSplitForFile Enter!!!");
 			for (int i = 0; i < readTimeNum; i++)
 				splits.add(createFileSplit(fileName, begin, length));
 		} finally {
