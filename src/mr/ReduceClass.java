@@ -4,17 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapred.*;
 
 import utilities.StringJoin;
 
-public class ReduceClass extends Reducer<Text, Text, NullWritable, Text> {
+public class ReduceClass  extends MapReduceBase implements Reducer<Text, Text, NullWritable, Text> {
 	private Text result = new Text();
 
-	public void reduce(Text key, Iterable<Text> values, Context context)
-			throws IOException, InterruptedException {
+	public void reduce(Text key, Iterable<Text> values, OutputCollector<NullWritable, Text> output, Reporter reporter)
+			throws IOException{
 		String value = null;
 		String tmp = null;
 		double tmpFitnessValue = 10;
@@ -36,7 +35,7 @@ public class ReduceClass extends Reducer<Text, Text, NullWritable, Text> {
 		}
 		NullWritable nullw = null;
 		result.set(value);
-		context.write(nullw, result);
+		output.collect(nullw, result);
 	}
 
 	public double line2FitnessValue(String line) {

@@ -18,10 +18,10 @@ import org.apache.hadoop.io.compress.CompressionCodecFactory;
 import org.apache.hadoop.io.compress.Decompressor;
 import org.apache.hadoop.io.compress.SplitCompressionInputStream;
 import org.apache.hadoop.io.compress.SplittableCompressionCodec;
-import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.hadoop.mapreduce.lib.input.FileSplit;
+import org.apache.hadoop.mapred.InputSplit;
+import org.apache.hadoop.mapred.RecordReader;
+import org.apache.hadoop.mapred.TaskAttemptContext;
+import org.apache.hadoop.mapred.FileSplit;
 
 /**
  * This class aims to build RecordReader use in MyFileRecordReader. Deal with
@@ -156,12 +156,10 @@ public class MyFileRecordReader extends RecordReader<LongWritable, Text> {
 		}
 	}
 
-	@Override
 	public LongWritable getCurrentKey() {
 		return key;
 	}
 
-	@Override
 	public Text getCurrentValue() {
 		return value;
 	}

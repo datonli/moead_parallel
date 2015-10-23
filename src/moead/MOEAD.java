@@ -24,9 +24,9 @@ public class MOEAD {
 	
 	public static void main(String[] args) throws IOException{
 		
-		int popSize = 4000;
-		int neighbourSize = 400;
-		int iterations = 6000;
+		int popSize = 406;
+		int neighbourSize = 30;
+		int iterations = 200;
 		
 		AProblem problem = ZDT1.getInstance();
 		AMOP mop = CMOP.getInstance(popSize,neighbourSize,problem);
@@ -36,7 +36,7 @@ public class MOEAD {
 		for(int i = 0 ; i < iterations; i ++)
 			mop.updatePop();
 		System.out.println("Running time is : " + (System.currentTimeMillis()-startTime));
-		String filename = "/home/hadoop/experiment/serial_result/moead_new.txt";
+		String filename = "/home/laboratory/workspace/moead_parallel/experiments/moead_new.txt";
 		mop.write2File(filename);
 		System.out.println("done!");
 		

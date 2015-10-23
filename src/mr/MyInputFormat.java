@@ -44,7 +44,6 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
 	public RecordReader<LongWritable, Text> createRecordReader(
 		      InputSplit genericSplit, TaskAttemptContext context) 
 		      throws IOException {
-		
 		return new LineRecordReader();
 	}
 	

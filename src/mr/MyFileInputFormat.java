@@ -5,20 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.FileSplit;
-import org.apache.hadoop.mapreduce.lib.input.LineRecordReader;
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.LineReader;
 
 /**
@@ -27,36 +16,48 @@ import org.apache.hadoop.util.LineReader;
  * @author root
  * @date 2015-5-4
  */
-public class MyFileInputFormat extends FileInputFormat<LongWritable, Text> {
+public class MyFileInputFormat extends FileInputFormat<LongWritable, Text> //implements JobConfigurable 
+{
 
 	public static final String READFILETIME = "READFILETIMES";
-
-	public static void setReadFileTime(Job job, int numLines) {
+/*
+	public static void setReadFileTime(JobConf job, int numLines) {
 		job.getConfiguration().setInt(READFILETIME, numLines);
 	}
 
 	public static int getNumLinesPerSplit(JobContext job) {
 		return job.getConfiguration().getInt(READFILETIME, 1);
 	}
-
-	@Override
+*/
+	public RecordReader<LongWritable,Text> getRecordReader(
+		InputSplit genericSplit, JobConf job,
+	    Reporter reporter
+	) 
+	throws IOException{
+		
+		return new MyFileRecordReader();
+	}
+	
+	/*
 	public RecordReader<LongWritable, Text> createRecordReader(
 			InputSplit genericSplit, TaskAttemptContext context)
 			throws IOException {
 
 		return new MyFileRecordReader();
 	}
+	*/
 
 	protected boolean isSplitable(JobContext context, Path filename) {
 		return false;
 	}
 
-	@Override
 	public List<InputSplit> getSplits(JobContext job) throws IOException {
 		List<InputSplit> splits = new ArrayList<InputSplit>();
 		for (FileStatus status : listStatus(job)) {
 			splits.addAll(getSplitsForFile(status, job.getConfiguration(),
-					getNumLinesPerSplit(job)));
+					//getNumLinesPerSplit(job)
+					1
+					));
 		}
 		return splits;
 	}

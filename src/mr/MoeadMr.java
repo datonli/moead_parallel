@@ -10,14 +10,9 @@ import mop.AMOP;
 import mop.CMOP;
 import mop.MopData;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapred.*;
 
 import problems.AProblem;
 import problems.DTLZ2;
@@ -59,26 +54,30 @@ public class MoeadMr {
 
 		long startTime = System.currentTimeMillis();
 		for (int i = 0; i < loopTime; i++) {
-			Configuration conf = new Configuration();
-			Job job = new Job(conf, "moead mr");
-			job.setJarByClass(MoeadMr.class);
+
+			JobConf conf = new JobConf(MoeadMr.class);
+			conf.setJobName("moead mapreduce");
+			
+
+			conf.setJarByClass(MoeadMr.class);
 			MapClass.setInnerLoop(innerLoop);
-			MyFileInputFormat.setReadFileTime(job, readFileTime);
-			job.setInputFormatClass(MyFileInputFormat.class);
-			job.setOutputFormatClass(TextOutputFormat.class);
-			job.setMapperClass(MapClass.class);
-			job.setReducerClass(ReduceClass.class);
-			job.setOutputKeyClass(Text.class);
-			job.setOutputValueClass(Text.class);
-			FileInputFormat.addInputPath(job, new Path(
+			//MyFileInputFormat.setReadFileTime(conf,readFileTime);
+			//conf.setInputFormat(MyFileInputFormat.class);
+			conf.setInputFormat(NLineFileInputFomat.class);
+			conf.setOutputFormat(TextOutputFormat.class);
+			conf.setMapperClass(MapClass.class);
+			conf.setReducerClass(ReduceClass.class);
+			conf.setOutputKeyClass(Text.class);
+			conf.setOutputValueClass(Text.class);
+			FileInputFormat.setInputPaths(conf,new Path(
 					"hdfs://192.168.1.102:9000/user/root/moead/"
 					//"hdfs://localhost:9000/moead/" 
 					+ i +"/part-r-00000"));
-			FileOutputFormat.setOutputPath(job, new Path(
+			FileOutputFormat.setOutputPath(conf,new Path(
 					"hdfs://192.168.1.102:9000/user/root/moead/"
 					//"hdfs://localhost:9000/moead/" 
 					+ (i+1)));
-			job.waitForCompletion(true);
+			JobClient.runJob(conf);
 		}
 		System.out.println("Running time is : " + (System.currentTimeMillis() - startTime));
 		for (int i = 0; i < loopTime + 1; i++) {
