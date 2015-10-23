@@ -55,28 +55,29 @@ public class MoeadMr {
 		System.out.println("Timer start!!!");
 		for (int i = 0; i < loopTime; i++) {
 			System.out.println("The " + i + "th time!");
-			JobConf conf = new JobConf(MoeadMr.class);
-			conf.setJobName("moead mapreduce");
+			JobConf jobConf = new JobConf(MoeadMr.class);
+			jobConf.setJobName("moead mapreduce");
+			jobConf.setNumMapTasks(4);
+			jobConf.setNumReduceTasks(1);
 
-			conf.setJarByClass(MoeadMr.class);
+			jobConf.setJarByClass(MoeadMr.class);
 			MapClass.setInnerLoop(innerLoop);
-			//MyFileInputFormat.setReadFileTime(conf,readFileTime);
-			conf.setInputFormat(MyFileInputFormat.class);
-			//conf.setInputFormat(NLineFileInputFomat.class);
-			conf.setOutputFormat(TextOutputFormat.class);
-			conf.setMapperClass(MapClass.class);
-			conf.setReducerClass(ReduceClass.class);
-			conf.setOutputKeyClass(Text.class);
-			conf.setOutputValueClass(Text.class);
-			FileInputFormat.setInputPaths(conf,new Path(
+			MyFileInputFormat.setReadFileTime(jobConf,readFileTime);
+			jobConf.setInputFormat(MyFileInputFormat.class);
+			//jobConf.setInputFormat(NLineFileInputFomat.class);
+			jobConf.setOutputFormat(TextOutputFormat.class);
+			jobConf.setMapperClass(MapClass.class);
+			jobConf.setReducerClass(ReduceClass.class);
+			jobConf.setOutputKeyClass(Text.class);
+			jobConf.setOutputValueClass(Text.class);
+			
+			FileInputFormat.addInputPath(jobConf,new Path(
 					"hdfs://192.168.1.102:8020/user/root/moead/"
-					//"hdfs://localhost:8020/moead/" 
-					+ i +"/part-r-00000"));
-			FileOutputFormat.setOutputPath(conf,new Path(
+					+ i + "/part-r-00000"));
+			FileOutputFormat.setOutputPath(jobConf,new Path(
 					"hdfs://192.168.1.102:8020/user/root/moead/"
-					//"hdfs://localhost:8020/moead/" 
 					+ (i+1)));
-			JobClient.runJob(conf);
+			JobClient.runJob(jobConf);
 		}
 		System.out.println("Running time is : " + (System.currentTimeMillis() - startTime));
 		for (int i = 0; i < loopTime + 1; i++) {

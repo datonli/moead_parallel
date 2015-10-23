@@ -13,22 +13,20 @@ import org.apache.hadoop.util.LineReader;
 /**
  * duplicate using input file as multi-files input.
  * 
- * @author root
+ * @author Datong Li
  * @date 2015-5-4
  */
 public class MyFileInputFormat extends FileInputFormat<LongWritable, Text> //implements JobConfigurable 
 {
 
 	public static final String READFILETIME = "READFILETIMES";
-/*
 	public static void setReadFileTime(JobConf job, int numLines) {
-		job.getConfiguration().setInt(READFILETIME, numLines);
+		job.setInt(READFILETIME, numLines);
 	}
 
-	public static int getNumLinesPerSplit(JobContext job) {
-		return job.getConfiguration().getInt(READFILETIME, 1);
+	public static int getNumLinesPerSplit(JobConf job) {
+		return job.getInt(READFILETIME, 1);
 	}
-*/
 	public RecordReader<LongWritable,Text> getRecordReader(
 		InputSplit genericSplit, JobConf job,
 	    Reporter reporter
@@ -58,8 +56,7 @@ public class MyFileInputFormat extends FileInputFormat<LongWritable, Text> //imp
 		List<InputSplit> splits = new ArrayList<InputSplit>();
 		for (FileStatus status : listStatus(job)) {
 			splits.addAll(getSplitsForFile(status, job,
-					//getNumLinesPerSplit(job)
-					4
+					getNumLinesPerSplit(job)
 					));
 		}
 		return splits;
