@@ -38,15 +38,6 @@ public class MyFileInputFormat extends FileInputFormat<LongWritable, Text> //imp
 		System.out.println("Enter getRecordReader!!!");
 		return new MyFileRecordReader2(job,split,recordDelimiterBytes);
 	}
-	
-	/*
-	public RecordReader<LongWritable, Text> createRecordReader(
-			InputSplit genericSplit, TaskAttemptContext context)
-			throws IOException {
-
-		return new MyFileRecordReader();
-	}
-	*/
 
 	protected boolean isSplitable(JobContext context, Path filename) {
 		return false;

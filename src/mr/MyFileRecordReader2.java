@@ -96,14 +96,14 @@ public class MyFileRecordReader2 implements RecordReader<LongWritable, Text> {
         end = cIn.getAdjustedEnd();
         filePosition = cIn; // take pos from compressed stream
       } else {
-        //in = new MyLineReader(codec.createInputStream(fileIn,decompressor), job, recordDelimiter);
-        in = new MyLineReader(codec.createInputStream(fileIn,decompressor), recordDelimiter);
+        in = new MyLineReader(codec.createInputStream(fileIn,decompressor), job, recordDelimiter);
+        //in = new MyLineReader(codec.createInputStream(fileIn,decompressor), recordDelimiter);
         filePosition = fileIn;
       }
     } else {
       fileIn.seek(start);
-      //in = new MyLineReader(fileIn, job, recordDelimiter);
-      in = new MyLineReader(fileIn, recordDelimiter);
+      in = new MyLineReader(fileIn, job, recordDelimiter);
+      //in = new MyLineReader(fileIn, recordDelimiter);
       filePosition = fileIn;
     }
     // If this is not the first split, we always throw away first record
@@ -141,7 +141,8 @@ public class MyFileRecordReader2 implements RecordReader<LongWritable, Text> {
     throws IOException{
     //this.maxLineLength = job.getInt(org.apache.hadoop.mapreduce.lib.input.MyFileRecordReader2.MAX_LINE_LENGTH, Integer.MAX_VALUE);
     this.maxLineLength = job.getInt("mapred.linerecordreader.maxlength",Integer.MAX_VALUE);
-    this.in = new MyLineReader(in,recordDelimiter);
+    //this.in = new MyLineReader(in,recordDelimiter);
+    this.in = new MyLineReader(in,job,recordDelimiter);
     this.start = offset;
     this.pos = offset;
     this.end = endOffset;    

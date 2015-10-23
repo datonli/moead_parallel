@@ -193,12 +193,12 @@ public class MyLineReader {
 
 	private int myReadLine(Text str, int maxLineLength, int maxBytesToConsume)
 			throws IOException {
+		System.out.println("Enter myReadLine!!!");
 		str.clear();
 		int txtLength = 0; // tracks str.getLength(), as an optimization
 		long bytesConsumed = 0;
 		int delPosn = 0;
 		do {
-			
 			int startPosn = bufferPosn; // starting from where we left off the last  time
 			bufferPosn = buffer.length;					
 			int n = -1;
