@@ -37,8 +37,6 @@ public class CMoChromosome extends MoChromosome {
 		problem.evaluate(genes,objectiveValue);
 	}
 	
-	
-	
 	@Override
 	public void diff_xover(MoChromosome ind0, MoChromosome ind1,
 			MoChromosome ind2){

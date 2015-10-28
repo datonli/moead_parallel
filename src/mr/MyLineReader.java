@@ -33,7 +33,7 @@ import org.apache.hadoop.io.Text;
  * In both cases, EOF also terminates an otherwise unterminated line.
  */
 public class MyLineReader {
-	private static final int DEFAULT_BUFFER_SIZE = 40 * 1024 * 1024;
+	private static final int DEFAULT_BUFFER_SIZE = 80 * 1024 * 1024;
 	private int bufferSize = DEFAULT_BUFFER_SIZE;
 	private InputStream in;
 	private byte[] buffer;
@@ -208,9 +208,9 @@ public class MyLineReader {
 			}
 			bytesConsumed += readLength;
 			int appendLength = readLength - delPosn;
-			/*if (appendLength > maxLineLength - txtLength) {
+			if (appendLength > maxLineLength - txtLength) {
 				appendLength = maxLineLength - txtLength;
-			}*/
+			}
 			if (appendLength > 0) {
 				str.append(buffer, startPosn, appendLength);
 				txtLength += appendLength;
@@ -297,6 +297,7 @@ public class MyLineReader {
 	 */
 	private int readCustomLine(Text str, int maxLineLength,
 			int maxBytesToConsume) throws IOException {
+		System.out.println("Enter readCustomLine!!!");
 		str.clear();
 		int txtLength = 0; // tracks str.getLength(), as an optimization
 		long bytesConsumed = 0;

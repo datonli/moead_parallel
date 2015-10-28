@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d.axes3d import Axes3D
 
 x,y,z = [], [], []
 #for line in open("/home/hadoop/experiment/serial_result/moead_ZDT3_30.txt"):
-for line in open("/home/hadoop/experiment/serial_result/moead_new.txt").readlines(): 
+for line in open("/home/laboratory/workspace/moead_parallel/experiments/moead_new.txt").readlines(): 
     if line.__len__() != 1:
         lineSplit = line.strip().split(' ')
         x.append(float(lineSplit[0]))

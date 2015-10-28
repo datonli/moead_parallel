@@ -82,14 +82,6 @@ public class CMOP extends AMOP {
 		}
 		return Math.sqrt(sum);
 	}
-	
-	/*private void initWeight() {
-		weights = new ArrayList<double[]>();
-		for (int i = 0; i <= popSize; i++) {
-			double[] weight = new double[objectiveDimesion];
-			for(int j = 0; j < )
-		}
-	}*/
 
 	private void initWeight() {
 		weights = new ArrayList<double[]>();
@@ -138,7 +130,6 @@ public class CMOP extends AMOP {
 				}
 			}
 		}*/
-		
 	}
 
 
@@ -174,8 +165,6 @@ public class CMOP extends AMOP {
 	}
 	
 	private MoChromosome diffReproduction(int i){
-
-		
 		int k, l, m;
 		do{
 			k = neighbourTable.get(i)[PRNG.nextInt(0,

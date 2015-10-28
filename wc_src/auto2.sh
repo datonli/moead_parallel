@@ -6,5 +6,5 @@ javac -cp /home/laboratory/hadoop-2.7.1/share/hadoop/common/hadoop-common-2.7.1.
 
 jar -cvf wc.jar org
 
-/home/laboratory/hadoop-2.7.1/bin/hadoop jar wc.jar org.apache.hadoop.example.WC /input /output
+hadoop jar wc.jar org.apache.hadoop.example.WC /input /output
 
