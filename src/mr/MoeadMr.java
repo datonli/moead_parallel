@@ -95,7 +95,7 @@ public class MoeadMr {
 			mopData.clear();
 			mopData.setDelimiter("\n");
 			// read the whole file
-
+			mopData.line2mop(hdfsOper.readWholeFile("moead/"+(i+1)+"/part-r-00000");		
 			mopStr = mopData.mop2Str();
 			hdfsOper.rm("moead/moead/txt");
 			hdfsOper.createFile("moead/moead.txt", mopStr, writeTime);

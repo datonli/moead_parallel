@@ -295,6 +295,29 @@ public class HdfsOper {
 		}
 		fs.close();
 	}
+
+	public String readWholeFile(String file) throws IOException {
+	    Path filePath = new Path(file);
+    	FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
+			//byte[] buff = new byte[fs.getLength(filePath)];
+			byte[] buff = new byte[(int)fs.getFileStatus(filePath).getLen()];
+			FSDataInputStream os = null;
+			if(fs.exists(filePath)){
+				try {
+					os = fs.open(filePath);
+					os.readFully(0,buff);
+					System.out.println("Read " + file + " !");
+				} finally {
+					if ( os != null)
+								os.close();
+				}	
+			} else {
+						System.out.println("The " + file + " doesn't exists !!!" );
+			}
+			fs.close();
+			return new String(buff);
+	}
+
 	// test use cases
 	public static void main(String[] args) throws IOException {
 		HdfsOper ho  = new HdfsOper();
@@ -305,7 +328,7 @@ public class HdfsOper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		ho.readWholeFile("/test/a.txt");
 		Configuration conf = config();
 		HdfsOper hdfs = new HdfsOper(conf);
 		hdfs.mkdir("moead/");
