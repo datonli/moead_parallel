@@ -13,7 +13,8 @@ public class MapClass extends MapReduceBase implements Mapper<Object, Text, Text
 
 	private static int innerLoop = 1;
 	
-	static MopData mopData = new MopData();
+	//static MopData mopData = new MopData();
+	
 	Text weightVector = new Text();
 	Text indivInfo = new Text();
 
@@ -25,14 +26,10 @@ public class MapClass extends MapReduceBase implements Mapper<Object, Text, Text
 			throws IOException{
 		String paragraph = value.toString();
 		System.out.println("paragraph is " + paragraph);
-		String[] lines = paragraph.split("\n");
-		mopData.clear();
+		MopDataPop mopData = new MopDataPop();
+		//mopData.clear();
 		try {
-			if("".equals(lines)){
-				throw new WrongRemindException("Empty lines");
-			}
-			for (String line : lines)
-				mopData.line2mop(line);
+			mopData.line2mop(paragraph);
 			
 //			running moead algorithm
 			//MOEAD.moead(mopData.mop,1);

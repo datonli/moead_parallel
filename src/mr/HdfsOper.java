@@ -95,6 +95,27 @@ public class HdfsOper {
 		return (new InputStreamReader(fs.open(filePath)));
 	}
 
+	public void appendFile(String file,String content,int writeTime) throws IOException {
+		Path filePath = new Path(file);
+		FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
+		byte[] buff = content.getBytes();
+		byte[] enter = "\n".getBytes();
+		FSDataOutputStream os = null;
+		try {
+			os = fs.append(filePath);
+			
+			for(int i = 0; i < writeTime; i ++){
+				os.write(buff, 0, buff.length);
+				os.write(enter, 0, enter.length);
+			}
+			System.out.println("Append: " + file);
+
+		} finally {
+			if (os != null)
+				os.close();
+		}
+		fs.close();
+	}
 	public void appendFile(String file,String content) throws IOException {
 		Path filePath = new Path(file);
 		FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
@@ -159,7 +180,28 @@ public class HdfsOper {
 		System.out.println("download: from" + remote + " to " + local);
 		fs.close();
 	}
+	
+	public void createFile(String file, String content, int writeTime) throws IOException {
+		Path filePath = new Path(file);
+		FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
+		byte[] buff = content.getBytes();
+		byte[] enter = "\n".getBytes();
+		FSDataOutputStream os = null;
+		try {
+			os = fs.create(filePath);
+			for(int i = 0; i < writeTime; i ++){
+				os.write(buff, 0, buff.length);
+				os.write(enter, 0, enter.length);
+			}
+			System.out.println("Create: " + file);
 
+		} finally {
+			if (os != null)
+				os.close();
+		}
+		fs.close();
+	}
+	
 	public void createFile(String file, String content) throws IOException {
 		Path filePath = new Path(file);
 		FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
@@ -178,6 +220,47 @@ public class HdfsOper {
 		fs.close();
 	}
 
+	public void addContentFile(String file, String content, int writeTime) throws IOException {
+		Path filePath = new Path(file);
+		FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
+		byte[] buff = content.getBytes();
+		byte[] enter = "\n".getBytes();
+		FSDataOutputStream os = null;
+		if(!fs.exists(filePath))
+		{
+			try {
+				
+				os = fs.create(filePath);
+				
+			for(int i = 0; i < writeTime; i ++){
+				os.write(buff, 0, buff.length);
+				os.write(enter, 0, enter.length);
+			}
+				System.out.println("Create: " + file);
+	
+			} finally {
+				if (os != null)
+					os.close();
+			}
+		}
+		else
+		{
+			try {
+				os = fs.append(filePath);
+				
+			for(int i = 0; i < writeTime; i ++){
+				os.write(buff, 0, buff.length);
+				os.write(enter, 0, enter.length);
+			}
+				System.out.println("Append: " + file);
+
+			} finally {
+				if (os != null)
+					os.close();
+			}
+		}
+		fs.close();
+	}
 	public void addContentFile(String file, String content) throws IOException {
 		Path filePath = new Path(file);
 		FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
@@ -214,14 +297,14 @@ public class HdfsOper {
 	}
 	// test use cases
 	public static void main(String[] args) throws IOException {
-		/*HdfsOper ho  = new HdfsOper();
+		HdfsOper ho  = new HdfsOper();
 		try {
 			ho.rm("/test/a.txt");
 			ho.mkdir("/test/",(short)1);
-			ho.addContentFile("/test/a.txt","hello world!\n");
+			ho.addContentFile("/test/a.txt","hello world!",4);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}*/
+		}
 		
 		Configuration conf = config();
 		HdfsOper hdfs = new HdfsOper(conf);
