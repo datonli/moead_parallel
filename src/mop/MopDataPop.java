@@ -15,7 +15,7 @@ public class MopDataPop implements DataOperator {
 
 	String DELIMITER = "_";
 
-	public boolean setDelimiter(String delimiter) {
+	public void setDelimiter(String delimiter) {
 		DELIMITER = delimiter;
 	}
 

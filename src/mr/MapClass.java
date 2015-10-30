@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import moead.MOEAD;
 import mop.MopData;
+import mop.MopDataPop;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 

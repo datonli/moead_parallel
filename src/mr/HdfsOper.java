@@ -73,6 +73,28 @@ public class HdfsOper {
 		}
 	}
 
+	public void cp(String file,String anotherFile) throws IOException {
+		Path path = new Path(file);
+		Path anotherPath = new Path(anotherFile);
+		FileSystem fs = FileSystem.get(URI.create(hdfsPath),conf);
+		FSDataInputStream fsdis = null;
+		FSDataOutputStream fsdos = null;
+		if(fs.exists(path)){
+			try {		
+				fsdis = fs.open(path);
+				fsdos = fs.create(anotherPath);
+				IOUtils.copyBytes(fsdis, fsdos, 4096, false);
+				System.out.println("The file " + file + " has copied as " + anotherFile + " !\n");
+			} finally {
+				IOUtils.closeStream(fsdis);
+				IOUtils.closeStream(fsdos);
+				fs.close();
+			}
+		} else {
+			System.out.println("The file " + file + " doesn't exists ! copy failed !\n");		
+		}
+	}
+
 	public void ls(String folder) throws IOException {
 		Path path = new Path(folder);
 		FileSystem fs = FileSystem.get(URI.create(hdfsPath), conf);
@@ -329,6 +351,7 @@ public class HdfsOper {
 			e.printStackTrace();
 		}
 		ho.readWholeFile("/test/a.txt");
+		ho.cp("/test/a.txt","/test/b.txt");
 		Configuration conf = config();
 		HdfsOper hdfs = new HdfsOper(conf);
 		hdfs.mkdir("moead/");
