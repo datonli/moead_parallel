@@ -14,7 +14,7 @@ public class MapClass extends MapReduceBase implements Mapper<Object, Text, Text
 
 	private static int innerLoop = 1;
 	
-	//static MopData mopData = new MopData();
+	static MopDataPop mopData = new MopDataPop();
 	
 	Text weightVector = new Text();
 	Text indivInfo = new Text();
@@ -26,9 +26,10 @@ public class MapClass extends MapReduceBase implements Mapper<Object, Text, Text
 	public void map(Object key, Text value, OutputCollector<Text, Text> output, Reporter reporter) 
 			throws IOException{
 		String paragraph = value.toString();
-		System.out.println("paragraph is " + paragraph);
-		MopDataPop mopData = new MopDataPop();
-		//mopData.clear();
+		//System.out.println("paragraph is " + paragraph);
+		//MopDataPop mopData = new MopDataPop();
+		System.out.println("map begin ... ");
+		mopData.clear();
 		try {
 			mopData.line2mop(paragraph);
 			

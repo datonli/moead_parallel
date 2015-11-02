@@ -136,7 +136,7 @@ public class MopDataPop implements DataOperator {
 
 	@Override
 	public void line2mop(String line) throws WrongRemindException {
-		// A line stands for the pops. So split "_" will lead to mutli lines , and each l in lines stand for a individual
+		// Oct. 30, A line stands for the pops. So split "_" will lead to mutli lines , and each l in lines stand for a individual
 		String[] lines = line.split(DELIMITER);
 		for(int l = 0 ; l < lines.length ; l ++){
 			String[] lineSplit = lines[l].split(" ");

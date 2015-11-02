@@ -93,7 +93,9 @@ public class MoeadMr {
 			FileOutputFormat.setOutputPath(jobConf,new Path(
 					"hdfs://192.168.1.102:8020/user/root/moead/"
 					+ (i+1)));
+			System.out.println("Run job begin ... ");
 			JobClient.runJob(jobConf);
+			System.out.println("Run job end ... ");
 
 			// read the output of reduce and write the pop in moead.txt
 			mopData.clear();
