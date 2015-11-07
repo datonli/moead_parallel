@@ -35,7 +35,7 @@ public class MoeadMr {
 
 		int popSize = 406;
 		int neighbourSize = 30;
-		int iterations = 800;
+		int iterations = 400;
 		int writeTime = 4;
 		int innerLoop = 20;
 		int loopTime = iterations / (writeTime * innerLoop);
@@ -58,7 +58,7 @@ public class MoeadMr {
 			hdfsOper.rm("moead/" + i + "/");
 		hdfsOper.mkdir("moead/0/");
 		hdfsOper.createFile("moead/moead.txt", mopStr, writeTime);
-		hdfsOper.cp("moead/moead.txt","moead/0/part-r-00000");
+		hdfsOper.cp("moead/moead.txt","moead/0/part-00000");
 
 		long startTime = System.currentTimeMillis();
 		System.out.println("Timer start!!!");
@@ -101,14 +101,14 @@ public class MoeadMr {
 			mopData.clear();
 			mopData.setDelimiter("\n");
 			// read the whole file
-			mopData.line2mop(hdfsOper.readWholeFile("moead/"+(i+1)+"/part-r-00000"));		
+			mopData.line2mop(hdfsOper.readWholeFile("moead/"+(i+1)+"/part-00000"));		
 			mopStr = mopData.mop2Str();
 			hdfsOper.rm("moead/moead.txt");
 			hdfsOper.createFile("moead/moead.txt", mopStr, writeTime);
 		}
 		System.out.println("Running time is : " + (System.currentTimeMillis() - startTime));
 		for (int i = 0; i < loopTime + 1; i++) {
-			BufferedReader br = new BufferedReader(hdfsOper.open("moead/" + i + "/part-r-00000"));
+			BufferedReader br = new BufferedReader(hdfsOper.open("moead/" + i + "/part-00000"));
 			String line = null;
 			String content = null;
 			List<String> col = new ArrayList<String>();
