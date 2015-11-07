@@ -157,7 +157,7 @@ public class MopDataPop implements DataOperator {
 				throw new WrongRemindException(
 						"weight length isn't match. Data transfer error!\n"
 								+ "weightStr.lenght is : " + weightStr.length
-								+ "\nweight.length is :" + weight.length);
+								+ "\nweight.length is :" + weight.length + "\nwrong seg is : " + lineSplit[0]);
 			}
 			for (int i = 0; i < weightStr.length; i++) {
 				weight[i] = Double.parseDouble(weightStr[i]);
