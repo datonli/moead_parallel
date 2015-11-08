@@ -20,6 +20,7 @@ public class CMOP extends AMOP {
 		this.neighbourSize = neighbourSize;
 		this.objectiveDimesion = AProblem.objectiveDimesion;
 		this.problem = problem;
+		allocateAll();
 	}
 	
 	public static AMOP getInstance(int popSize,int neighbourSize,AProblem problem){
@@ -36,7 +37,7 @@ public class CMOP extends AMOP {
 	
 	@Override
 	public void initial() {
-		idealPoint = new double[objectiveDimesion];
+		//idealPoint = new double[objectiveDimesion];
 		for(int i = 0; i < objectiveDimesion; i ++)
 			idealPoint[i] = 1.0e+30;
 		
@@ -56,7 +57,7 @@ public class CMOP extends AMOP {
 
 
 	private void initNeighbour() {
-		neighbourTable = new ArrayList<int[]>(popSize);
+		//neighbourTable = new ArrayList<int[]>(popSize);
 
 		double[][] distancematrix = new double[popSize][popSize];
 		for (int i = 0; i < popSize; i++) {
@@ -84,7 +85,7 @@ public class CMOP extends AMOP {
 	}
 
 	private void initWeight() {
-		weights = new ArrayList<double[]>();
+		//weights = new ArrayList<double[]>();
 		for (int i = 0; i <= popSize; i++) {
 			if (objectiveDimesion == 2) {
 				double[] weight = new double[2];

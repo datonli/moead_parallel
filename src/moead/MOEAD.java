@@ -39,9 +39,9 @@ public class MOEAD {
 		// 741
 		int popSize = 406;
 		int neighbourSize = 30;
-		int iterations = 800;
+		int iterations = 400;
 		
-		AProblem problem = DTLZ2.getInstance();
+		AProblem problem = ZDT1.getInstance();
 		AMOP mop = CMOP.getInstance(popSize,neighbourSize,problem);
 //		mop.setProblem(problem);
 		mop.initial();

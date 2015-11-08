@@ -35,7 +35,7 @@ public class MoeadMr {
 
 		int popSize = 406;
 		int neighbourSize = 30;
-		int iterations = 400;
+		int iterations = 6400;
 		int writeTime = 4;
 		int innerLoop = 20;
 		int loopTime = iterations / (writeTime * innerLoop);
@@ -117,6 +117,8 @@ public class MoeadMr {
 			}
 			content = StringJoin.join("\n", col);
 			mopData.write2File("/home/laboratory/workspace/moead_parallel/experiments/parallel/" + i + ".txt",content);
+			if(i == loopTime)
+				mopData.write2File("/home/laboratory/workspace/moead_parallel/experiments/parallel/mr_moead.txt",content);
 //			hdfsOper.createFile("/moead/" + i + "/objectiveValue.txt", content);
 		}
 		System.out.println("LoopTime is : " + loopTime + "\n");
