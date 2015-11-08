@@ -40,7 +40,7 @@ public class MapClass extends MapReduceBase implements Mapper<Object, Text, Text
 		MopDataPop mopData = new MopDataPop(mop);
 		//MopDataPop mopData = new MopDataPop();
 		System.out.println("map begin ... ");
-		//mopData.clear();
+		mopData.clear();
 		try {
 			mopData.line2mop(paragraph);
 			
@@ -55,7 +55,7 @@ public class MapClass extends MapReduceBase implements Mapper<Object, Text, Text
 			System.out.println("output collect ~!~");
 			for (int i = 0; i < mopData.mop.chromosomes.size(); i++) {
 				weightVector.set(mopData.weight2Line(i));
-				System.out.println("key : " + mopData.weight2Line(i) + " , value : " + mopData.mop2Line(i));
+				//System.out.println("key : " + mopData.weight2Line(i) + " , value : " + mopData.mop2Line(i));
 				indivInfo.set(mopData.mop2Line(i));
 				output.collect(weightVector, indivInfo);
 			}

@@ -32,12 +32,11 @@ public class MoeadMr {
 	 */
 	public static void main(String[] args) throws IOException,
 			ClassNotFoundException, InterruptedException, WrongRemindException {
-
 		int popSize = 406;
 		int neighbourSize = 30;
-		int iterations = 6400;
+		int iterations = 800;
 		int writeTime = 4;
-		int innerLoop = 20;
+		int innerLoop = 2;
 		int loopTime = iterations / (writeTime * innerLoop);
 		AProblem problem = ZDT1.getInstance();
 		AMOP mop = CMOP.getInstance(popSize, neighbourSize, problem);
@@ -105,10 +104,12 @@ public class MoeadMr {
 			mopStr = mopData.mop2Str();
 			hdfsOper.rm("moead/moead.txt");
 			hdfsOper.createFile("moead/moead.txt", mopStr, writeTime);
+			mopData.clear();
 		}
 		System.out.println("Running time is : " + (System.currentTimeMillis() - startTime));
-		for (int i = 0; i < loopTime + 1; i++) {
-			BufferedReader br = new BufferedReader(hdfsOper.open("moead/" + i + "/part-00000"));
+		//for (int i = 0; i < loopTime + 1; i++) {
+			//BufferedReader br = new BufferedReader(hdfsOper.open("moead/" + i + "/part-00000"));
+			BufferedReader br = new BufferedReader(hdfsOper.open("moead/"+(loopTime-1)+"/part-00000"));
 			String line = null;
 			String content = null;
 			List<String> col = new ArrayList<String>();
@@ -116,11 +117,11 @@ public class MoeadMr {
 				col.add(StringJoin.join(" ",mopData.line2ObjValue(line)));
 			}
 			content = StringJoin.join("\n", col);
-			mopData.write2File("/home/laboratory/workspace/moead_parallel/experiments/parallel/" + i + ".txt",content);
-			if(i == loopTime)
+			//mopData.write2File("/home/laboratory/workspace/moead_parallel/experiments/parallel/" + i + ".txt",content);
+			//if(i == loopTime)
 				mopData.write2File("/home/laboratory/workspace/moead_parallel/experiments/parallel/mr_moead.txt",content);
 //			hdfsOper.createFile("/moead/" + i + "/objectiveValue.txt", content);
-		}
+		//}
 		System.out.println("LoopTime is : " + loopTime + "\n");
 	}
 }

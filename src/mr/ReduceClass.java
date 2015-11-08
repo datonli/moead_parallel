@@ -19,6 +19,8 @@ public class ReduceClass extends MapReduceBase implements Reducer<Text, Text, Nu
 		String tmp = null;
 		double tmpFitnessValue = 10;
 		double maxFitnessValue = 10;
+		double[] idealPointValue = {10,10};
+		boolean flag = false;
 		while(values.hasNext()){
 			tmp = values.next().toString();
 			if (!"111111111".equals(key.toString())) {
@@ -28,12 +30,15 @@ public class ReduceClass extends MapReduceBase implements Reducer<Text, Text, Nu
 					value = tmp;
 				}
 			} else {
-				List<String> col = new ArrayList<String>();
-				col.add("111111111");
-				col.add(tmp);
-				value = StringJoin.join(" ",col);
+				String[] tmpString = tmp.split(",");
+				for(int i = 0 ; i < tmpString.length; i ++) {
+					if(idealPointValue[i] > Double.parseDouble(tmpString[i]) )
+									idealPointValue[i] = Double.parseDouble(tmpString[i]);
+				}
+				flag = true;
 			}
 		}
+		if(flag) value ="111111111 " +  StringJoin.join(",",idealPointValue);
 		NullWritable nullw = null;
 		result.set(value);
 		output.collect(nullw, result);
